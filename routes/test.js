@@ -1,23 +1,30 @@
 // Express routes
 const router = require('express').Router();
-
-let tests = [
-  { id: 0, subject: 'Physics', score: 99, studentId: 0 },
-  { id: 1, subject: 'English', score: 78, studentId: 1 },
-  { id: 2, subject: 'Math', score: 90, studentId: 3 },
-  { id: 3, subject: 'English', score: 55, studentId: 3 },
-  { id: 4, subject: 'Physics', score: 88, studentId: 4 },
-];
+const { tests } = require('../db/db');
 
 // Get Tests
 router.get('/', function(req, res, next) {
   res.json(tests);
 });
 
+// Get top scoring student
+router.get('/top', function(req, res, next) {
+  const topScore = tests.reduce((acc, cur) => acc.score > cur.score ? acc : cur);
+  res.json(topScore);
+});
+
 // Get Test by Id
 router.get('/:id', function(req, res, next) {
   let test = tests.filter(test => test.id === +req.params.id);
   res.json(test);
+});
+
+// Get mean score for student
+router.get('/:id/mean', function(req, res, next) {
+  const studentId = req.params.id;
+  const studentTests = tests.filter(test => test.studentId == studentId);
+  const meanScore = studentTests.reduce((acc, cur) => acc.score + cur.score) / studentTests.length;
+  res.json(meanScore);
 });
 
 // Add Score
