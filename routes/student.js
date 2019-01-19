@@ -1,6 +1,7 @@
 const express = require('express');
-const students = require('../models/students');
 const router = express.Router();
+
+let students = [{id: 0, name: 'Dan'}, {id: 1, name: 'Karen'}, {id: 2, name: 'Jon'}];
 
 router.get('/', (req, res, next) => {
   try {
